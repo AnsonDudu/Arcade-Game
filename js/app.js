@@ -8,18 +8,22 @@ var Enemy = function(x,y) {
     this.y = y;
 };
 
+Enemy.prototype.move = function(speed){
+    if(this.x < 540){
+        this.x = this.x + speed;
+     }
+     else{
+        this.x = 0;
+        this.x = this.x + speed;
+     }
+} 
+
 // 此为游戏必须的函数，用来更新敌人的位置
 // 参数: dt ，表示时间间隙
 Enemy.prototype.update = function(dt) {
     // 你应该给每一次的移动都乘以 dt 参数，以此来保证游戏在所有的电脑上
     // 都是以同样的速度运行的
-    if(this.x <= 540){
-        this.x = this.x + 200*dt;
-    }
-    else {
-        this.x = -10;
-        this.x = this.x + 200*dt;
-    }
+    this.move(speed) * dt
 }
 
 
@@ -54,10 +58,13 @@ Player.prototype.handleInput = function(ecode){
 
 // 现在实例化你的所有对象
 var enemyA = new Enemy(0,50);
+    enemyA.move(20)
 var enemyB = new Enemy(0,140);
+    
 var enemyC = new Enemy(0,220);
+    
 
-
+console.log(enemyA);
 
 // 把所有敌人的对象都放进一个叫 allEnemies 的数组里面
 
