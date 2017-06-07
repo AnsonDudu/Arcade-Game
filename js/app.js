@@ -43,15 +43,17 @@ var Player = function(x,y){
 }
 
 Player.prototype.render = function(x,y){
-    collision();
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
 Player.prototype.update = function(dt){
+    player.checkCollision();
     player.handleInput()*dt;
 }
 
 Player.prototype.handleInput = function(ecode){
+    var win = false;
+
     switch (ecode){
             case "left":
             (function turnLeft(){
@@ -75,8 +77,7 @@ Player.prototype.handleInput = function(ecode){
             (function turnUp(){
                 player.y = player.y - 80;
                 if(player.y < 60){
-                    player.y = 60
-                    return false;
+                   win = true;
                 }
             })();
             break;
@@ -90,33 +91,27 @@ Player.prototype.handleInput = function(ecode){
             })();
             break;
         }
-}
 
-function collision(){
-    var enemyX = [];
-    var enemyY = [];
-    var flag = false;
-    for (i = 0; i < allEnemies.length; i++){
-        enemyX.push(allEnemies[i].x);
-        enemyY.push(allEnemies[i].y);
-    }
+    if(win == true){
 
-    var size =
-
-    if(enemyX.indexOf(player.x) !== -1 && enemyY.indexOf(player.y) !== -1){
-        flag = true
-    }
-    if( flag == true){
-        player.x = 200;
-        player.y = 380;
     }
 }
 
+Player.prototype.checkCollision = function(){
+    for(var i = 0; i < allEnemies.length; i++){
+        if(Math.abs(this.x - allEnemies[i].x)<55){
+            if((Math.abs(this.y - allEnemies[i].y))<40){
+                this.x =200;
+                this.y =380;
+            }
+       };
+    };
+};
 
 // 现在实例化你的所有对象
-var enemyA = new Enemy(0,50,2);
-var enemyB = new Enemy(0,140,2);
-var enemyC = new Enemy(0,220,2);
+var enemyA = new Enemy(0,50,4);
+var enemyB = new Enemy(0,140,6);
+var enemyC = new Enemy(0,220,8);
 
 
 console.log(enemyA);
