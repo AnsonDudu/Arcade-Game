@@ -1,29 +1,30 @@
-// 这是我们的玩家要躲避的敌人 
-var Enemy = function(x,y) {
+// 这是我们的玩家要躲避的敌人
+var Enemy = function(x,y,speed) {
     // 要应用到每个敌人的实例的变量写在这里
     // 我们已经提供了一个来帮助你实现更多敌人的图片或者雪碧图，
     // 用一个我们提供的工具函数来轻松的加载文件
     this.sprite = 'images/enemy-bug.png';
     this.x = x;
     this.y = y;
+    this.speed = speed;
 };
 
-Enemy.prototype.move = function(speed){
+Enemy.prototype.move = function(){
     if(this.x < 540){
-        this.x = this.x + speed;
+        this.x = this.x + this.speed;
      }
      else{
-        this.x = 0;
-        this.x = this.x + speed;
+        this.x = -10;
+        this.x = this.x + this.speed;
      }
-} 
+}
 
 // 此为游戏必须的函数，用来更新敌人的位置
 // 参数: dt ，表示时间间隙
 Enemy.prototype.update = function(dt) {
     // 你应该给每一次的移动都乘以 dt 参数，以此来保证游戏在所有的电脑上
     // 都是以同样的速度运行的
-    this.move(speed) * dt
+    this.move() * dt
 }
 
 
@@ -42,27 +43,81 @@ var Player = function(x,y){
 }
 
 Player.prototype.render = function(x,y){
-     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    collision();
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
-Player.prototype.update = function(dt){   
-
+Player.prototype.update = function(dt){
+    player.handleInput()*dt;
 }
 
 Player.prototype.handleInput = function(ecode){
+    switch (ecode){
+            case "left":
+            (function turnLeft(){
+                player.x = player.x - 100;
+                if(player.x < 0){
+                    player.x = 0
+                    return false;
+                }
+            })();
+            break;
+            case "right":
+            (function turnRight(){
+                player.x = player.x + 100;
+                if(player.x > 400){
+                    player.x = 400
+                    return false;
+                }
+            })();
+            break;
+            case "up":
+            (function turnUp(){
+                player.y = player.y - 80;
+                if(player.y < 60){
+                    player.y = 60
+                    return false;
+                }
+            })();
+            break;
+            case "down":
+            (function turnDown(){
+                player.y = player.y + 80;
+                if(player.y > 380){
+                    player.y = 380
+                    return false;
+                }
+            })();
+            break;
+        }
+}
 
+function collision(){
+    var enemyX = [];
+    var enemyY = [];
+    var flag = false;
+    for (i = 0; i < allEnemies.length; i++){
+        enemyX.push(allEnemies[i].x);
+        enemyY.push(allEnemies[i].y);
+    }
+
+    var size =
+
+    if(enemyX.indexOf(player.x) !== -1 && enemyY.indexOf(player.y) !== -1){
+        flag = true
+    }
+    if( flag == true){
+        player.x = 200;
+        player.y = 380;
+    }
 }
 
 
-
-
 // 现在实例化你的所有对象
-var enemyA = new Enemy(0,50);
-    enemyA.move(20)
-var enemyB = new Enemy(0,140);
-    
-var enemyC = new Enemy(0,220);
-    
+var enemyA = new Enemy(0,50,2);
+var enemyB = new Enemy(0,140,2);
+var enemyC = new Enemy(0,220,2);
+
 
 console.log(enemyA);
 
@@ -72,7 +127,8 @@ var allEnemies = [enemyA,enemyB,enemyC];
 
 // 把玩家对象放进一个叫 player 的变量里面
 
-var player = new Player(200,420);
+var player = new Player(200,380);
+
 
 // 这段代码监听游戏玩家的键盘点击事件并且代表将按键的关键数字送到 Play.handleInput()
 // 方法里面。你不需要再更改这段代码了。
