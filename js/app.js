@@ -6,7 +6,7 @@ var Enemy = function(x,y,speed) {
     this.sprite = 'images/enemy-bug.png';
     this.x = x;
     this.y = y;
-    this.speed = speed;
+    this.speed = speed + Math.random() * 2;
 };
 
 Enemy.prototype.move = function(){
@@ -14,7 +14,7 @@ Enemy.prototype.move = function(){
         this.x = this.x + this.speed;
      }
      else{
-        this.x = -10;
+        this.x = -5;
         this.x = this.x + this.speed;
      }
 }
@@ -24,7 +24,7 @@ Enemy.prototype.move = function(){
 Enemy.prototype.update = function(dt) {
     // 你应该给每一次的移动都乘以 dt 参数，以此来保证游戏在所有的电脑上
     // 都是以同样的速度运行的
-    this.move() * dt
+    this.move()
 }
 
 
@@ -53,7 +53,6 @@ Player.prototype.update = function(dt){
 
 Player.prototype.handleInput = function(ecode){
     var win = false;
-
     switch (ecode){
             case "left":
             (function turnLeft(){
@@ -93,7 +92,16 @@ Player.prototype.handleInput = function(ecode){
         }
 
     if(win == true){
-
+        player.x = 200;
+        player.y = 380;
+        var ele = document.createElement("div");
+        ele.innerHTML = "<div style='width=:200px, height:300px, border:solid 1px #ccc'><p>Congratulation</p></div>"
+        if(document.getElementById('win').children.length >= 1){
+            return false;
+        }
+        else{
+            document.getElementById('win').appendChild(ele);
+        }
     }
 }
 
@@ -109,16 +117,16 @@ Player.prototype.checkCollision = function(){
 };
 
 // 现在实例化你的所有对象
-var enemyA = new Enemy(0,50,4);
-var enemyB = new Enemy(0,140,6);
-var enemyC = new Enemy(0,220,8);
-
-
-console.log(enemyA);
+var enemyA = new Enemy(0,50, 5);
+var enemyB = new Enemy(0,140, 7);
+var enemyC = new Enemy(0,220, 4);
+var enemyD = new Enemy(0,50, 8);
+var enemyE = new Enemy(0,140, 6);
+var enemyF = new Enemy(0,220, 9);
 
 // 把所有敌人的对象都放进一个叫 allEnemies 的数组里面
 
-var allEnemies = [enemyA,enemyB,enemyC];
+var allEnemies = [enemyA,enemyB,enemyC,enemyD,enemyE,enemyF];
 
 // 把玩家对象放进一个叫 player 的变量里面
 
